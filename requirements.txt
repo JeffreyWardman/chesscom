@@ -1,0 +1,5 @@
+chess==1.6.1
+matplotlib==3.4.2
+numpy==1.20.3
+requests==2.23.0
+tqdm==4.48.0
