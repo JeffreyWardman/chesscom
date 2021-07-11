@@ -166,13 +166,15 @@ class MatchBoardScore(BaseModel):
 class MatchResult(BaseModel):
     """Match result.
 
+    May be missing if game/s are incomplete.
+
     Args:
-        played_as_white (str): Result when playing as white.
-        played_as_black (str): Result when playing as black.
+        played_as_white (str, optional): Result when playing as white.
+        played_as_black (str. optional): Result when playing as black.
     """
 
-    played_as_white: str
-    played_as_black: str
+    played_as_white: str = None
+    played_as_black: str = None
 
 
 class MatchBoardGame(BaseModel):
