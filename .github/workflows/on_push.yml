@@ -10,6 +10,7 @@ jobs:
         run: ./scripts/unit_tests.sh
 
   build_and_publish:
+    if: startsWith(github.ref, 'refs/tags')
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -24,7 +25,6 @@ jobs:
     - name: Build package
       run: python -m build --sdist --wheel --outdir dist/ .
     - name: Publish package
-      if: startsWith(github.ref, 'refs/tags')
       uses: pypa/gh-action-pypi-publish@master
       with:
         password: ${{ secrets.PYPI_API_TOKEN }}
