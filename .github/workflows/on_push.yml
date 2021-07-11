@@ -1,12 +1,16 @@
-name: Upload Python Package
-
-on: push
-
+name: Unit Tests (and Publish)
+on: [push]
 jobs:
-  build_and_publish:
-
+  Run-Unit-Tests:
     runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Run tests
+        run: ./scripts/unit_tests.sh
 
+  build_and_publish:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
