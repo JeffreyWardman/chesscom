@@ -4,20 +4,22 @@ from pydantic import BaseModel
 
 
 class ClubDetails(BaseModel):
-    """
-    id: the location of this profile (always self-referencing)
-    name: the human-readable name of this club
-    club_id: the non-changing Chess.com ID of this club
-    icon: (optional) URL of a 200x200 image
-    country: location of this club's country profile
-    average_daily_rating: average daily rating
-    members_count: total members count
-    created: timestamp of creation on Chess.com
-    last_activity: timestamp of the most recent post, match, etc
-    visibility: whether the club is public or private
-    join_request: location to submit a request to join this club
-    admin: array of URLs to the player profiles for the admins of this club
-    description: text description of the club
+    """Details about a club.
+
+    Args:
+        id (str): The location of this profile (always self-referencing).
+        name (str): The human-readable name of this club.
+        club_id (int): The non-changing Chess.com ID of this club.
+        icon (str, optional): URL of a 200x200 image.
+        country (str): Location of this club's country profile.
+        average_daily_rating (int): Average daily rating.
+        members_count (int): Total members count.
+        created (int): Timestamp of creation on Chess.com.
+        last_activity (int): Timestamp of the most recent post, match, etc.
+        visibility (str): Whether the club is public or private.
+        join_request (str): Location to submit a request to join this club.
+        admin (List[str]): Array of URLs to the player profiles for the admins of this club.
+        description (str): Text description of the club.
     """
 
     id: str
@@ -36,9 +38,11 @@ class ClubDetails(BaseModel):
 
 
 class UserJoinClub(BaseModel):
-    """
-    username: username
-    joined: timestamp user joined club
+    """Join date of user.
+
+    Args:
+        BaseModel (str): Username.
+        joined (int): Timestamp user joined club.
     """
 
     username: str
@@ -46,10 +50,12 @@ class UserJoinClub(BaseModel):
 
 
 class ClubMembers(BaseModel):
-    """
-    weekly: users joined in last week
-    monthly: users joined in last month
-    all_time: all users joined
+    """List of club members and their join date as per timeframe.
+
+    Args:
+        weekly (List[Dict[str, Union[str, int]]]): Users joined in last week.
+        monthly (List[Dict[str, Union[str, int]]]): Users joined in last month.
+        all_time (List[Dict[str, Union[str, int]]]): All users joined.
     """
 
     weekly: List[Dict[str, Union[str, int]]]
@@ -64,13 +70,15 @@ class ClubMembers(BaseModel):
 
 
 class ClubMatchDetails(BaseModel):
-    """
-    name: the team match name
-    id: URL pointing to the team match endpoint
-    opponent: URL pointing to the opponent club endpoint
-    result: Game result
-    start_time: timestamp of the match start
-    time_class: daily
+    """Details about the match.
+
+    Args:
+        name (str): The team match name.
+        id (str): URL pointing to the team match endpoint.
+        opponent (str): URL pointing to the opponent club endpoint.
+        result (str, optional): Game result.
+        start_time (str, optional): Timestamp of the match start.
+        time_class (str): Time class.
     """
 
     name: str
@@ -82,10 +90,12 @@ class ClubMatchDetails(BaseModel):
 
 
 class ClubMatches(BaseModel):
-    """
-    finished: List of finished matches
-    in_progress: List of in progress matches
-    registered: List of registered matches
+    """Lists of club matches that are registered, in progress or finished.
+
+    Args:
+        finished (List[Dict[str, Any]]): List of finished matches.
+        in_progress (List[Dict[str, Any]]): List of in progress matches.
+        registered (List[Dict[str, Any]]): List of registered matches.
     """
 
     finished: List[Dict[str, Any]]

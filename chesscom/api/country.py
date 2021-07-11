@@ -24,8 +24,18 @@ AVAILABLE_COUNTRIES = [
 
 
 class Country:
+    """Country API wrapper."""
+
     @staticmethod
     def details(country_alpha_2: str) -> CountryDetails:
+        """Get country details.
+
+        Args:
+            country_alpha_2 (str): Country alpha-2 code.
+
+        Returns:
+            CountryDetails: Country details class.
+        """
         assert len(country_alpha_2) == 2
         api_url = f"{BASE_COUNTRY_URL}/{country_alpha_2}"
         response = requests.get(api_url).json()
@@ -34,7 +44,16 @@ class Country:
 
     @staticmethod
     def players(country_alpha_2: str) -> List[str]:
-        """Note: Endpoint refreshes at most every 12 hours"""
+        """Get list of players from country.
+
+        Note: Endpoint refreshes at most every 12 hours.
+
+        Args:
+            country_alpha_2 (str): Country alpha-2 code.
+
+        Returns:
+            List[str]: List of players from country.
+        """
         assert len(country_alpha_2) == 2
         api_url = f"{BASE_COUNTRY_URL}/{country_alpha_2}/players"
         response = requests.get(api_url).json()
@@ -42,7 +61,16 @@ class Country:
 
     @staticmethod
     def clubs(country_alpha_2: str) -> List[str]:
-        """Note: Endpoint refreshes at most every 12 hours"""
+        """Get list of clubs from country.
+
+        Note: Endpoint refreshes at most every 12 hours.
+
+        Args:
+            country_alpha_2 (str): Country alpha-2 code.
+
+        Returns:
+            List[str]: List of clubs from country.
+        """
         assert len(country_alpha_2) == 2
         api_url = f"{BASE_COUNTRY_URL}/{country_alpha_2}/clubs"
         response = requests.get(api_url).json()

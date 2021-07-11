@@ -19,9 +19,11 @@ AVAILABLE_LEADERBOARDS = [
 
 
 class Trend(BaseModel):
-    """
-    direction: direction (0 or 1, where 1 is up and 0 is down)
-    delta: amount changed
+    """Amount changed in ranking and direction.
+
+    Args:
+        direction (int): Direction (0 or 1, where 1 is up and 0 is down).
+        delta (int): Amount changed.
     """
 
     direction: int
@@ -30,18 +32,19 @@ class Trend(BaseModel):
 
 class LeaderboardPlayerDetails(BaseModel):
     """
-    player_id: player id
-    id: player URL id
-    username: username
-    score: score
-    rank: leaderboard rank
-    url: player URL
-    country: player country URL
-    status: membership status
-    avatar: URL of image
-    trend_score: direction of player score and amount changed
-    trend_rank: direction of player rank and amount changed
-    flair_code: flair icon code
+    Args:
+        player_id (str): Player ID.
+        id (str): Player URL ID.
+        username (str): Username.
+        score (int): Score.
+        rank (int): Leaderboard rank.
+        url (url): Player URL.
+        country (str): Player country URL.
+        status (str): Membership status.
+        avatar (str): URL of image.
+        trend_score (Dict[str, int], optional): Direction of player score and amount changed.
+        trend_rank (Dict[str, int], optional): Direction of player rank and amount changed.
+        flair_code (str): Flair icon code.
     """
 
     player_id: str
@@ -66,11 +69,21 @@ class LeaderboardPlayerDetails(BaseModel):
 
 
 class LeaderboardDetails(BaseModel):
-    f"""
-    Leaderboard for {AVAILABLE_LEADERBOARDS}
-
+    f"""Leaderboard for {AVAILABLE_LEADERBOARDS}.\n
     Note: the endpoint refreshes when one of the leaderboards is updated.
 
+    Args:
+        daily (List[Dict[str, Any]]): Leaderboard for the daily game mode.
+        daily960 (List[Dict[str, Any]]): Leaderboard for the daily960 game mode.
+        live_rapid (List[Dict[str, Any]]): Leaderboard for the live rapid game mode.
+        live_blitz (List[Dict[str, Any]]): Leaderboard for the live blitz game mode.
+        live_bullet (List[Dict[str, Any]]): Leaderboard for the live bullet game mode.
+        live_bughouse (List[Dict[str, Any]]): Leaderboard for the live bughouse game mode.
+        live_blitz960 (List[Dict[str, Any]]): Leaderboard for the live blitz960 game mode.
+        live_threecheck (List[Dict[str, Any]]): Leaderboard for the live three check game mode.
+        live_crazyhouse (List[Dict[str, Any]]): Leaderboard for the live crazyhouse game mode.
+        live_kingofthehill (List[Dict[str, Any]]): Leaderboard for the live king of the hill game mode.
+        tactics (List[Dict[str, Any]]): Leaderboard for the tactics game mode.
     """
     daily: List[Dict[str, Any]]
     daily960: List[Dict[str, Any]]

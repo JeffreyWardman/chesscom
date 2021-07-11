@@ -4,23 +4,25 @@ from pydantic import BaseModel
 
 
 class TournamentSettings(BaseModel):
-    """
-    type: tournament type
-    rules: tournament rules
-    time_class: tournament time class
-    time_control: tournament time control
-    is_rated: whether tournament is rated
-    is_official: whether tournament is official
-    is_invite_only: whether tournament is invite only
-    initial_group_size: initial tournament group size
-    user_advance_count: number of users who advance to the next round
-    use_tiebreak: whether tiebreak is used
-    allow_vacation: whether users can be on vacation and not forfeit
-    winner_places: winner placements
-    registered_user_count: number of registered users
-    games:per_opponent: number of games played against each opponent
-    total_rounds: number of rounds
-    concurrent_games_per_opponent: Number of concurrent games allowed per opponent
+    """Tournament settings.
+
+    Args:
+        type (str): Tournament type.
+        rules (str): Tournament rules.
+        time_class (str): Tournament time class.
+        time_control (str): Tournament time control.
+        is_rated (bool): Whether tournament is rated.
+        is_official (bool): Whether tournament is official.
+        is_invite_only (bool): Whether tournament is invite only.
+        initial_group_size (int): Initial tournament group size.
+        user_advance_count (int): Number of users who advance to the next round.
+        use_tiebreak (bool): Whether tiebreak is used.
+        allow_vacation (bool): Whether users can be on vacation and not forfeit.
+        winner_places (int): Winner placements.
+        registered_user_count (int): Number of registered users.
+        games:per_opponent (int): Number of games played against each opponent.
+        total_rounds (int): Number of rounds.
+        concurrent_games_per_opponent (int): Number of concurrent games allowed per opponent.
     """
 
     type: str
@@ -42,9 +44,11 @@ class TournamentSettings(BaseModel):
 
 
 class TournamentPlayerStatus(BaseModel):
-    """
-    username: username
-    status: status of user
+    """Tournament player status.
+
+    Args:
+        username (str): Username.
+        status (str): Status of user.
     """
 
     username: str
@@ -52,16 +56,18 @@ class TournamentPlayerStatus(BaseModel):
 
 
 class TournamentDetails(BaseModel):
-    """
-    name: name
-    url: url to Web tournament's URL
-    description: description
-    creator: username of creator
-    status: status of tournament {finished, in_progress, registration}
-    finish_time: timestamp of finish time, if tournament is finished
-    settings: tournament settings
-    players: List of tournament's players and their status
-    rounds: List of tournament's rounds URL
+    """Tournament details.
+
+    Args:
+        name (str): Name.
+        url (str): URL to Web tournament's URL.
+        description (str): Description.
+        creator (str): Username of creator.
+        status (str): Status of tournament {finished, in_progress, registration}.
+        finish_time (int): Timestamp of finish time, if tournament is finished.
+        settings (Dict[str, Any]): Tournament settings.
+        players (List[Dict[str, str]]): List of tournament's players and their status.
+        rounds (List[str]): List of tournament's rounds URL.
     """
 
     name: str
@@ -81,9 +87,11 @@ class TournamentDetails(BaseModel):
 
 
 class TournamentRoundPlayerAdvancement(BaseModel):
-    """
-    username: username
-    is_advancing: only if this tournament is completed
+    """Information on whether player advances from tournament round.
+
+    Args:
+        username (str): Username.
+        is_advancing (bool, optional): Only if this tournament is completed.
     """
 
     username: str
@@ -91,9 +99,11 @@ class TournamentRoundPlayerAdvancement(BaseModel):
 
 
 class TournamentRoundDetails(BaseModel):
-    """
-    groups: List of tournament's round groups (URLs)
-    players: List of tournament's round players
+    """Tournament round groups and players.
+
+    Args:
+        groups (List[str]): List of tournament's round groups (URLs).
+        players (List[Dict[str, Union[str, bool]]]): List of tournament's round players.
     """
 
     groups: List[str]
@@ -105,11 +115,13 @@ class TournamentRoundDetails(BaseModel):
 
 
 class TournamentRoundGroupPlayer(BaseModel):
-    """
-    rating: player rating before game
-    result: game result
-    id: player URL
-    username: username
+    """Information on player in tournament round's group.
+
+    Args:
+        rating (int): Player rating before game.
+        result (str): Game result.
+        id (str): Player URL.
+        username (str): Username.
     """
 
     rating: int
@@ -119,22 +131,24 @@ class TournamentRoundGroupPlayer(BaseModel):
 
 
 class TournamentRoundGroupGames(BaseModel):
-    """
-    white: URL of the white player's profile
-    black: URL of the black player's profile
-    url: URL of this game
-    fen: current FEN
-    pgn: current PGN
-    turn: player to move
-    move_by: timestamp of when the next move must be made. this is "0" if the player-to-move is on vacation
-    draw_offer: (optional) player who has made a draw offer
-    last_activity: timestamp of the last activity on the game
-    start_time: timestamp of the game start (Daily Chess only)
-    time_control: PGN-compliant time control
-    time_class: time-per-move grouping, used for ratings
-    rules: game variant information (e.g., "chess960")
-    eco: URL pointing to ECO opening (if available)
-    tournament: URL pointing to tournament (if available),
+    """Information on tournament round group games.
+
+    Args:
+        white (Dict[str, Union[str, int]]): URL of the white player's profile.
+        black (Dict[str, Union[str, int]]): URL of the black player's profile.
+        url (str): URL of this game.
+        fen (str): current FEN.
+        pgn (str): Current PGN.
+        turn (str, optional): Player to move.
+        move_by (int, optional): Timestamp of when the next move must be made. this is "0" if the player-to-move is on vacation.
+        draw_offer (str, optional): player who has made a draw offer.
+        last_activity (int, optional): Timestamp of the last activity on the game.
+        start_time (int): Timestamp of the game start (Daily Chess only).
+        time_control (str): PGN-compliant time control.
+        time_class (str): Time-per-move grouping, used for ratings.
+        rules (str): Game variant information.
+        eco (str, optional): URL pointing to ECO opening.
+        tournament (str, optional): URL pointing to tournament.
     """
 
     white: Dict[str, Union[str, int]]
@@ -164,10 +178,10 @@ class TournamentRoundGroupGames(BaseModel):
 
 class TournamentRoundGroupPlayer(BaseModel):
     """
-    username: username
-    points: points earned by player in this group adjuested in case of fair play recalculations)
-    tie_break: tie-break points by player earned in this group
-    is_advancing: {true, false}
+    username (str): Username.
+    points (str): Points earned by player in this group adjusted in case of fair play recalculations. Defaults to "0".
+    tie_break (str): Tie-break points by player earned in this group. Defaults to "0".
+    is_advancing (bool): Whether player advances. Defaults to False.
     """
 
     username: str
@@ -182,6 +196,14 @@ class TournamentRoundGroupPlayer(BaseModel):
 
 
 class TournamentRoundGroupDetails(BaseModel):
+    """List of games, players and fair play removals in tournament round group.
+
+    Args:
+        fair_play_removals (List[str]): List of removals due to breach of fair play.
+        games (List[Dict[str, Any]]): List of games.
+        players (List[Dict[str, Union[str, int, bool]]]): List of players.
+    """
+
     fair_play_removals: List[str]
     games: List[Dict[str, Any]]
     players: List[Dict[str, Union[str, int, bool]]]
@@ -193,15 +215,18 @@ class TournamentRoundGroupDetails(BaseModel):
 
 
 class TournamentResults(BaseModel):
-    """
-    url: link to the PubAPI URL of the tournament
-    id: link to the Web URL of the tournament
-    wins: number of wins
-    losses: number of losses
-    draws: number of draws
-    points_awarded: points_awarded
-    placement: placement
-    status: final status of the player in this tourmanent {winner, eliminated, withdrew, removed}
+    """Tournament results of player.
+
+    Args:
+        url (str): Link to the PubAPI URL of the tournament.
+        id (str): Link to the Web URL of the tournament.
+        status (str): Final status of the player in this tourmanent {winner, eliminated, withdrew, removed}.
+        wins (int): Number of wins.
+        losses (int): Number of losses.
+        draws (int): Number of draws.
+        points_awarded (int, optional): Points awarded.
+        placement (int, optional): Player placement.
+        total_players (int): Total number of players in tournament.
     """
 
     url: str
@@ -216,10 +241,12 @@ class TournamentResults(BaseModel):
 
 
 class TournamentStatus(BaseModel):
-    """
-    url: link to the PubAPI URL of the tournament
-    id: link to the Web URL of the tournament
-    status: final status of the player in this tourmanent {winner, eliminated, withdrew, removed}
+    """Tournament status.
+
+    Args:
+        url (str): Link to the PubAPI URL of the tournament.
+        id (str): Link to the Web URL of the tournament.
+        status (str): Final status of the player in this tourmanent {winner, eliminated, withdrew, removed}.
     """
 
     url: str
@@ -230,10 +257,11 @@ class TournamentStatus(BaseModel):
 class TournamentsSummary(BaseModel):
     """Summary of tournaments participated in.
 
-    count: number of tournaments joined
-    withdraw: number of tournaments withdrawn from
-    points: total number of points earned in tournaments
-    highest_finish: best tournament place
+    Args:
+        count (int): Number of tournaments joined.
+        withdraw (int): Number of tournaments withdrawn from.
+        points (int): Total number of points earned in tournaments.
+        highest_finish (int): Best tournament place.
     """
 
     count: int

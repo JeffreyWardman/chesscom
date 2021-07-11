@@ -2,11 +2,13 @@ from pydantic import BaseModel
 
 
 class StreamerDetails(BaseModel):
-    """
-    username: username
-    avatar: URL,
-    twitch_url: Twitch.tv URL
-    url: member url's
+    """Streamer details.
+
+    Args:
+        username (str): Username.
+        avatar (str): URL of avatar.
+        twitch_url (str, optional): Twitch.tv URL.
+        url (str): Member's Chess.com profile URL.
     """
 
     username: str

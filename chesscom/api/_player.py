@@ -7,60 +7,13 @@ from ._match import MatchResults
 from ._tournaments import TournamentResults, TournamentsSummary
 
 
-class ClubDetails(BaseModel):
-    """
-    id: URL of Club endpoint
-    name: Club's name
-    last_activity: timestamp of last activity
-    icon: Club's icon url
-    url: Club's url
-    joined: Timestamp of when player has joined the Club
-    """
-
-    id: str
-    name: str
-    last_activity: int
-    icon: str
-    url: str
-    joined: int
-
-
-class PlayerProfile(BaseModel):
-    """
-    id: the location of this profile (always self-referencing)
-    url: the chess.com user's profile page (the username is displayed with the original letter case)
-    username: the username of this player
-    player_id: the non-changing Chess.com ID of this player
-    title: (optional) abbreviation of chess title, if any
-    status: account status: closed, closed:fair_play_violations, basic, premium, mod, staff
-    name: (optional) the personal first and last name
-    avatar: (optional) URL of a 200x200 image
-    location: (optional) the city or location
-    country: API location of this player's country's profile
-    joined: timestamp of registration on Chess.com
-    last_online: timestamp of the most recent login
-    followers: the number of players tracking this player's activity
-    is_streamer: if the member is a Chess.com streamer
-    twitch_url: Twitch.tv URL
-    fide: FIDE rating
-    """
-
-    id: str
-    url: str
-    username: str
-    player_id: int
-    title: str = None
-    status: str
-    name: str = None
-    avatar: str = None
-    location: str = None
-    country: str = None
-    joined: int
-    last_online: int
-    followers: int
-    is_streamer: bool
-    twitch_url: str = None
-    fide: int = None
+class PlayerAccountStatus(Enum):
+    closed = "closed"
+    fair_play_violations = "closed:fair_play_violations"
+    basic = "basic"
+    premium = "premium"
+    mod = "mod"
+    staff = "staff"
 
 
 class GameResults(Enum):
@@ -81,23 +34,85 @@ class GameResults(Enum):
     bughousepartnerlose = "Bughouse partner lost"
 
 
-class CurrentDailyChess(BaseModel):
+class ClubDetails(BaseModel):
+    """Details about club and user's club activity.
+
+    Args:
+        id (str): URL of Club endpoint.
+        name (str): Club's name.
+        last_activity (int): timestamp of last activity.
+        icon (str): Club's icon URL.
+        url (str): Club's URL.
+        joined (int): Timestamp of when player has joined the club.
     """
-    white: URL of the white player's profile
-    black: URL of the black player's profile
-    url: URL of this game
-    fen: current FEN
-    pgn: current PGN
-    turn: player to move
-    move_by: timestamp of when the next move must be made. this is "0" if the player-to-move is on vacation
-    draw_offer: (optional) player who has made a draw offer
-    last_activity: timestamp of the last activity on the game
-    start_time: timestamp of the game start (Daily Chess only)
-    time_control: PGN-compliant time control
-    time_class: time-per-move grouping, used for ratings
-    rules: game variant information (e.g., "chess960")
-    tournament: URL pointing to tournament (if available),
-    match: URL pointing to team match (if available)
+
+    id: str
+    name: str
+    last_activity: int
+    icon: str
+    url: str
+    joined: int
+
+
+class PlayerProfile(BaseModel):
+    """Player profile.
+
+    Args:
+        id (str): Location of this profile (always self-referencing).
+        url (str): Chess.com user's profile page (the username is displayed with the original letter case).
+        username (str): The username of this player.
+        player_id (int): The non-changing Chess.com ID of this player.
+        title (str, optional): Abbreviation of chess title.
+        status (str): Account status.
+        name (str, optional): The personal first and last name.
+        avatar (str, optional): URL of a 200x200 image.
+        location (str, optional): The city or location of player.
+        country (str, optional): API location of this player's country's profile.
+        joined (int): Timestamp of registration on Chess.com.
+        last_online (int): Timestamp of the most recent login.
+        followers (int): Number of players tracking this player's activity.
+        is_streamer (bool): If the member is a Chess.com streamer.
+        twitch_url (str, optional): Twitch.tv URL.
+        fide (int, optional): FIDE rating.
+    """
+
+    id: str
+    url: str
+    username: str
+    player_id: int
+    title: str = None
+    status: str
+    name: str = None
+    avatar: str = None
+    location: str = None
+    country: str = None
+    joined: int
+    last_online: int
+    followers: int
+    is_streamer: bool
+    twitch_url: str = None
+    fide: int = None
+
+
+class CurrentDailyChess(BaseModel):
+    """Current daily chess game details.
+
+    Args:
+        white (str): URL of the white player's profile.
+        black (str): URL of the black player's profile.
+        url (str): URL of this game.
+        fen (str): Current FEN.
+        pgn (str): Current PGN.
+        turn (str): Player to move.
+        move_by (int): Timestamp of when the next move must be made. this is "0" if the player-to-move is on vacation.
+        draw_offer (str, optional): Player who has made a draw offer.
+        last_activity (int): Timestamp of the last activity on the game.
+        start_time (int): Timestamp of the game start (Daily Chess only).
+        time_control (str): PGN-compliant time control.
+        time_class (str): Time-per-move grouping, used for ratings.
+        rules (str): Game variant information.
+        tournament (str, optional): URL pointing to tournament.
+        match (str, optional): URL pointing to team match.
     """
 
     white: str
@@ -118,11 +133,13 @@ class CurrentDailyChess(BaseModel):
 
 
 class ToMoveDailyChess(BaseModel):
-    """
-    url: URL of this game
-    move_by: timestamp of the when the move must be made by. this is "0" if it is not this player's turn
-    draw_offer: (optional) this player has received a draw offer
-    last_activity: timestamp of the last activity on the game
+    """Daily chess game details for game where it's user's turn to move.
+
+    Args:
+        url (str): URL of this game.
+        move_by (int): Timestamp of the when the move must be made by. this is "0" if it is not this player's turn.
+        draw_offer (bool, optional): This player has received a draw offer.
+        last_activity (int): Timestamp of the last activity on the game.
     """
 
     url: str
@@ -132,11 +149,13 @@ class ToMoveDailyChess(BaseModel):
 
 
 class Player(BaseModel):
-    """
-    username: the username
-    rating: the player's rating at the start of the game
-    result: game result
-    id:  URL of this player's profile
+    """Player information for a game.
+
+    Args:
+        username (str): Username.
+        rating (int): Player's rating at the start of the game.
+        result (str): Game result.
+        id (str): URL of this player's profile.
     """
 
     username: str
@@ -146,19 +165,22 @@ class Player(BaseModel):
 
 
 class MonthlyArchive(BaseModel):
-    """
-    white: details of the white-piece player
-    black: details of the black-piece player
-    url: URL of this game
-    fen: final FEN
-    pgn: final PGN
-    start_time: timestamp of the game start (Daily Chess only)
-    end_time: timestamp of the game end
-    time_control: PGN-compliant time control
-    rules: game variant information (e.g., "chess960")
-    eco: URL pointing to ECO opening (if available),
-    tournament: URL pointing to tournament (if available),
-    match: URL pointing to team match (if available)
+    """Monthly archived game details.
+
+    Args:
+        white (Dict[str, Any]): Details of the white-piece player.
+        black (Dict[str, Any]): Details of the black-piece player.
+        url (str): URL of this game.
+        fen (str): Final FEN.
+        pgn (str): Final PGN.
+        start_time (int, optional): Timestamp of the game start (Daily Chess only).
+        end_time (int): Timestamp of the game end.
+        time_control (str): PGN-compliant time control.
+        rules (str): Game variant information.
+        eco (str, optional): URL pointing to ECO opening.
+        tournament (str, optional): URL pointing to tournament.
+        match (str, optional): URL pointing to team match.
+        time_class (str): Time class.
     """
 
     white: Dict[str, Any]
@@ -185,9 +207,11 @@ class MonthlyArchive(BaseModel):
 
 
 class RatingLog(BaseModel):
-    """
-    rating: rating
-    date: timestamp rating was (first) achieved
+    """Rating log for amount and date first achieved.
+
+    Args:
+        rating (int): Rating.
+        date (int): Timestamp rating was (first) achieved.
     """
 
     rating: int
@@ -195,11 +219,12 @@ class RatingLog(BaseModel):
 
 
 class LastRating(BaseModel):
-    """The current stats.
+    """Current player rating, date achieved and Glicko RD value.
 
-    date: timestamp of the last rated game finished
-    rating: most-recent rating
-    rd: the Glicko "RD" value used to calculate ratings changes
+    Args:
+        date (int): Timestamp of the last rated game finished.
+        rating (int): Most-recent rating.
+        rd (int): Glicko "RD" value used to calculate ratings changes.
     """
 
     date: int
@@ -208,11 +233,12 @@ class LastRating(BaseModel):
 
 
 class BestRating(BaseModel):
-    """The best rating achieved by a win.
+    """Best player rating, URL to game and date achieved.
 
-    date: timestamp of the best-win game
-    rating: highest rating achieved
-    game: URL of the best-win game
+    Args:
+        date (int): Timestamp of the best-win game.
+        rating (int): Highest rating achieved.
+        game (str): URL of the best-win game.
     """
 
     date: int
@@ -223,11 +249,12 @@ class BestRating(BaseModel):
 class GamesRecord(BaseModel):
     """Summary of all games played.
 
-    win: number of games won
-    loss: number of games lost
-    draw: number of games drawn
-    time_per_move: integer number of seconds per average move
-    timeout_percent: timeout percentage in the last 90 days
+    Args:
+        win (int): Number of games won.
+        loss (int): Number of games lost.
+        draw (int): Number of games drawn.
+        time_per_move (int, optional): Integer number of seconds per average move.
+        timeout_percent (float, optional): Timeout percentage in the last 90 days.
     """
 
     win: int
@@ -238,6 +265,14 @@ class GamesRecord(BaseModel):
 
 
 class PlayerMatches(BaseModel):
+    """Player matches separated by status (registered, in progress, finished).
+
+    Args:
+        finished (List[Dict[str, Any]]): Details on finished matches.
+        in_progress (List[Dict[str, Any]]): Details on matches in progress.
+        registered (List[Dict[str, Any]]): Details on registered matches.
+    """
+
     finished: List[Dict[str, Any]]
     in_progress: List[Dict[str, Any]]
     registered: List[Dict[str, Any]]
@@ -252,12 +287,14 @@ class PlayerMatches(BaseModel):
             setattr(self, match_type, matches)
 
 
-class ChessMode(BaseModel):
-    """
-    last: the current stats
-    best: the best rating achieved by a win
-    record: summary of all games played
-    tournament: summary of tournaments participated in
+class ChessModeStats(BaseModel):
+    """Basic statistics for player for a chess mode.
+
+    Args:
+        last (Dict[str, int]): Current stats.
+        best (Dict[str, Any]): Best rating achieved by a win.
+        record (Dict[str, int]): Summary of all games played.
+        tournament (Dict[str, Any], optional): Summary of tournaments participated in.
     """
 
     last: Dict[str, int]
@@ -274,10 +311,12 @@ class ChessMode(BaseModel):
             self.tournament = TournamentsSummary(**self.tournament)
 
 
-class GameMode(BaseModel):
-    """
-    highest: highest rating and date for game mode
-    lowest: lowest rating and date for game mode
+class ChessModeRatings(BaseModel):
+    """Player rating information for a chess mode.
+
+    Args:
+        highest (Dict[str, int], optional): Highest rating and date for game mode.
+        lowest (Dict[str, int], optional): Lowest rating and date for game mode.
     """
 
     highest: Dict[str, int] = None
@@ -292,10 +331,12 @@ class GameMode(BaseModel):
 
 
 class PlayerTournaments(BaseModel):
-    """
-    finished: List of finished matches in tournaments
-    in_progress: List of in progress matches in tournaments
-    registered: List of registered matches in tournaments
+    """List of matches in tournaments for player based on progress status.
+
+    Args:
+        finished (List[Dict[str, Any]]): List of finished matches in tournaments.
+        in_progress (List[Dict[str, Any]]): List of in progress matches in tournaments.
+        registered (List[Dict[str, Any]]): List of registered matches in tournaments.
     """
 
     finished: List[Dict[str, Any]]

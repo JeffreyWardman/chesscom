@@ -4,16 +4,18 @@ from pydantic import BaseModel
 
 
 class Player(BaseModel):
-    """
-    username: username
-    board: url of board
-    rating: rating of player
-    rd: Glicko RD
-    timeout_percent: timeout percentage in the last 90 days
-    status: status of user
-    stats: url to player's stats
-    played_as_white: result {win, lose, resign, etc.} of player when played as white (if game's finished)
-    played_as_black: result {win, lose, resign, etc.} of player when played as black (if game's finished)
+    """Player information in match.
+
+    Args:
+        username (str): Username.
+        board (str): URL of board.
+        rating (int, optional): Rating of player.
+        rd (float, optional): Glicko RD.
+        timeout_percent (float, optional): Timeout percentage in the last 90 days.
+        status (str): Status of user.
+        stats (str, optional): URL to player's stats.
+        played_as_white (str, optional): Result {win, lose, resign, etc.} of player when played as white (if game's finished).
+        played_as_black (str, optional): Result {win, lose, resign, etc.} of player when played as black (if game's finished).
     """
 
     username: str
@@ -28,12 +30,14 @@ class Player(BaseModel):
 
 
 class MatchBoardPlayer(BaseModel):
-    """
-    username: the username
-    rating: the player's rating at the start of the game
-    result: game result, if game's finished
-    id: URL of this player's profile
-    team: url to club's profile
+    """Player result in club match.
+
+    Args:
+        username (str): Username.
+        rating (int): The player's rating at the start of the game.
+        result (str, optional): Game result, if game's finished.
+        id (str): URL of this player's profile.
+        team (str, optional): URL to club's profile.
     """
 
     username: str
@@ -44,17 +48,19 @@ class MatchBoardPlayer(BaseModel):
 
 
 class MatchSettings(BaseModel):
-    """
-    time_class: time class (daily)
-    time_control: time control
-    initial_setup: initial match setup
-    rules: game variant information (e.g., "chess960")
-    min_team_players: minimum number of players per team
-    max_team_players: maximum number of players per team
-    min_required_games: minimum number of required games
-    min_rating: minimum rating of players to be admitted in this match
-    max_rating: maximum rating of players to be admitted in this match
-    autostart: if the match is set to automatically start
+    """Match settings.
+
+    Args:
+        time_class (str): time class.
+        time_control (str): time control.
+        initial_setup (str, optional): initial match setup.
+        rules (str): game variant information (e.g., "chess960").
+        min_team_players (int): minimum number of players per team. Defaults to 0.
+        max_team_players (int): maximum number of players per team. Defaults to 0.
+        min_required_games (int): minimum number of required games. Defaults to 0.
+        min_rating (int, optional): minimum rating of players to be admitted in this match.
+        max_rating (int, optional): maximum rating of players to be admitted in this match.
+        autostart (bool): if the match is set to automatically start. Defaults to False.
     """
 
     time_class: str
@@ -71,10 +77,14 @@ class MatchSettings(BaseModel):
 
 class MatchTeamDetails(BaseModel):
     """
-    id: API URL for the club profile
-    url: Web URL for the club profile
-    name: club name
-    score Team score (adjuested in case of fair play recalculations)
+
+    Args:
+        id (str): API URL for the club profile.
+        url (str, optional): Web URL for the club profile.
+        name (str): club name.
+        score (int): Team score (adjuested in case of fair play recalculations).
+        players (List[Dict[str, Union[str, int, float]]]): List of players in team.
+        fair_play_removals (List[str], optional): List of fair play removals.
     """
 
     id: str
@@ -90,6 +100,15 @@ class MatchTeamDetails(BaseModel):
 
 
 class MatchTeams(BaseModel):
+    """Teams in match.
+
+    Args:
+        team1 (Dict[str, Any]): Team 1.
+        team2 (Dict[str, Any]): Team 2.
+        fair_play_removals (List[str], optional): List of fair play removals during match.
+
+    """
+
     team1: Dict[str, Any]
     team2: Dict[str, Any]
     fair_play_removals: List[str] = None
@@ -104,15 +123,17 @@ class MatchTeams(BaseModel):
 
 
 class MatchDetails(BaseModel):
-    """
-    name: match name
-    url: the URL of the match on the website
-    description: match description
-    start_time: manual or auto time start
-    settings: match settings
-    status: whether match has been registered/in progress/finished
-    boards: number of boards
-    teams: information about team1 and team2
+    """Match details.
+
+    Args:
+        name (str): match name.
+        url (str): the URL of the match on the website.
+        description (str, optional): match description.
+        start_time (int): manual or auto time start.
+        settings (Dict[str, Union[str, int]]): match settings.
+        status (str): whether match has been registered/in progress/finished.
+        boards (int): number of boards.
+        teams (Dict[str, Dict[str, Any]]): information about team1 and team2.
     """
 
     name: str
@@ -131,9 +152,11 @@ class MatchDetails(BaseModel):
 
 
 class MatchBoardScore(BaseModel):
-    """
-    player1: User score (adjusted in case of fair play recalculations)
-    player2: User score (adjusted in case of fair play recalculations)
+    """Match board score for players.
+
+    Args:
+        player1 (float): User score (adjusted in case of fair play recalculations).
+        player2 (float): User score (adjusted in case of fair play recalculations).
     """
 
     player1: float
@@ -141,9 +164,11 @@ class MatchBoardScore(BaseModel):
 
 
 class MatchResult(BaseModel):
-    """
-    played_as_white: Result when playing as white
-    played_as_black: Result when playing as black
+    """Match result.
+
+    Args:
+        played_as_white (str): Result when playing as white.
+        played_as_black (str): Result when playing as black.
     """
 
     played_as_white: str
@@ -151,20 +176,22 @@ class MatchResult(BaseModel):
 
 
 class MatchBoardGame(BaseModel):
-    """
-    white: details of the white-piece player
-    black: details of the black-piece player
-    url: URL of this game
-    fen: current FEN
-    pgn: final PGN, if game's finished
-    start_time: timestamp of the game start (Daily Chess only)
-    end_time: timestamp of the game end, if game's finished
-    time_control: PGN-compliant time control
-    time_class: time-per-move grouping, used for ratings
-    rules: game variant information (e.g., "chess960")
-    eco: URL pointing to ECO opening (if available)
-    match: URL pointing to team match (if available)
-    rated: whether game is rated
+    """Game details on board in match.
+
+    Args:
+        white (Dict[str, Union[str, int]]): Details of the white-piece player.
+        black (Dict[str, Union[str, int]]): Details of the black-piece player.
+        url (str): URL of this game.
+        fen (str): Current FEN.
+        pgn (str, optional): Final PGN, if game's finished.
+        start_time (int, optional): Timestamp of the game start (Daily Chess only).
+        end_time (int, optional): Timestamp of the game end, if game's finished.
+        time_control (str): PGN-compliant time control.
+        time_class (str): Time-per-move grouping, used for ratings.
+        rules (str): Game variant information (e.g., "chess960")
+        eco (str, optional): URL pointing to ECO opening.
+        match (str, optional): URL pointing to team match.
+        rated (bool, optional): Whether game is rated.
     """
 
     white: Dict[str, Union[str, int]]
@@ -191,9 +218,11 @@ class MatchBoardGame(BaseModel):
 
 
 class MatchBoardDetails(BaseModel):
-    """
-    board_scores: board scores
-    games: games
+    """Match board details.
+
+    Args:
+        board_scores (Dict[str, float]): Board scores.
+        games (List[Dict[str, Any]]): Games.
     """
 
     board_scores: Dict[str, float]
@@ -209,15 +238,18 @@ class MatchBoardDetails(BaseModel):
 
 
 class LiveMatchDetails(BaseModel):
-    """
-    id: live match id
-    name: match name
-    url: match url
-    start_time: timestamp of match start
-    status: match status
-    boards: number of boards in match
-    settings: match settings
-    teams: match teams
+    """Live match details.
+
+    Args:
+        id (str): Live match ID.
+        name (str): Match name.
+        url (str): Match URL.
+        start_time (int): Timestamp of match start.
+        end_time (int, optional): Timestamp of match end.
+        status (str): Match status.
+        boards (int): Number of boards in match.
+        settings (Dict[str, Union[str, int, bool]]): Match settings.
+        teams (Dict[str, Dict[str, Any]]): Match teams.
     """
 
     id: str
@@ -237,13 +269,15 @@ class LiveMatchDetails(BaseModel):
 
 
 class MatchResults(BaseModel):
-    """
-    name: Name of match
-    url: URL of match on web site
-    id: URL of PubAPI match endpoint
-    club: URL of player's club endpoint
-    results: List of results of game played as white and black respectively
-    board: URL of PubAPI match board endpoint
+    """Match results.
+
+    Args:
+        name (str): Name of match.
+        url (str): URL of match on web site.
+        id (str): URL of PubAPI match endpoint.
+        club (str): URL of player's club endpoint.
+        results (Dict[str, str], optional): List of results of game played as white and black respectively.
+        board (str, optional): URL of PubAPI match board endpoint.
     """
 
     name: str

@@ -2,13 +2,15 @@ from pydantic.main import BaseModel
 
 
 class PuzzleDetails(BaseModel):
-    """
-    title: the title of the daily puzzle
-    url: url to daily puzzle in chess.com
-    publish_time: the date of the published puzzle
-    fen: the FEN of the published puzzle
-    pgn: the PGN of the published puzzle
-    image: the link to the image
+    """Puzzle details.
+
+    Args:
+        title (str): Title of the daily puzzle.
+        url (str): URL to daily puzzle in Chess.com.
+        publish_time (int): Date of the published puzzle.
+        fen (str): FEN of the published puzzle.
+        pgn (str): PGN of the published puzzle.
+        image (str): link to the image.
     """
 
     title: str
