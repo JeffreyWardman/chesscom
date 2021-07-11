@@ -1,0 +1,11 @@
+name: GitHub Actions Demo
+on: [push, pull_request]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Branch ${{ github.ref }}."
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Run tests
+        run: ./scripts/unit_tests.sh
