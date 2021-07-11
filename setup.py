@@ -24,4 +24,7 @@ setup(
     packages=find_packages(),
     keywords=["chess", "chess.com", "api"],
     install_requires=requirements,
+    extras_require={
+        "dev": requirements + ["black==21.5b1", "isort==4.3.0", "pytest_cov==2.12.0"]
+    },
 )
